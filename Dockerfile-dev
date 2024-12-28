@@ -1,0 +1,8 @@
+### Dev ###
+FROM node:alpine AS build
+WORKDIR /usr/src/app/client
+ENV NODE_ENV=development
+COPY client .
+RUN npm i
+
+CMD ["npm","run", "dev"]

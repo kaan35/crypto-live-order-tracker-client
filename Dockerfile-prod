@@ -1,0 +1,8 @@
+### Prod ###
+FROM node:alpine AS build
+WORKDIR /usr/src/app/client
+ENV NODE_ENV=production
+COPY client .
+RUN npm i
+
+CMD ["npm","start"]
