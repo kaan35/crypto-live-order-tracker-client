@@ -1,8 +1,9 @@
-import { StoreProvider } from '@/app/StoreProvider';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import React from 'react';
 import './globals.css';
+import React from 'react';
+import { StoreProvider } from '@/app/StoreProvider';
+import { Notification } from '@/app/features/notification/Notification';
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <StoreProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-neutral-900`}>
+          <Notification />
           {children}
         </body>
       </html>

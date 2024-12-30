@@ -28,6 +28,7 @@ const eslintConfig = [
       'no-duplicate-imports': ['error', { includeExports: true }],
       'no-undef': 'warn',
       'no-unused-vars': 'warn',
+      'react-hooks/exhaustive-deps': 'off',
       'require-await': 'warn',
       'sort-keys': 'warn',
       'sort-vars': 'warn',
