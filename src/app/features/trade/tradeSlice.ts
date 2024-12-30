@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PairListResponse, PairResponse } from '@/app/types/pairs';
+import { PairResponse } from '@/app/types/pairs';
 
 export interface TradeSliceState {
   pair: PairResponse;
-  pairsList: PairListResponse;
 }
 
 const initialState: TradeSliceState = {
@@ -17,18 +16,6 @@ const initialState: TradeSliceState = {
     },
     status: '',
   },
-  pairsList: {
-    data: [
-      {
-        _id: '',
-        key: '',
-        title: '',
-        titleSeparatedBegin: '',
-        titleSeparatedEnd: '',
-      },
-    ],
-    status: '',
-  },
 };
 
 export const tradeSlice = createSlice({
@@ -38,18 +25,14 @@ export const tradeSlice = createSlice({
     setPair: create.reducer((state, action: PayloadAction<PairResponse>) => {
       state.pair = action.payload;
     }),
-    setPairsList: create.reducer((state, action: PayloadAction<PairListResponse>) => {
-      state.pairsList = action.payload;
-    }),
   }),
   selectors: {
     selectPair: (state) => state.pair,
-    selectPairsList: (state) => state.pairsList,
   },
 });
 
-export const { setPair, setPairsList } = tradeSlice.actions;
+export const { setPair } = tradeSlice.actions;
 
-export const { selectPair, selectPairsList } = tradeSlice.selectors;
+export const { selectPair } = tradeSlice.selectors;
 
 export default tradeSlice.reducer;

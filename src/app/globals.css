@@ -37,3 +37,22 @@
 .text-default {
   @apply text-gray-300 text-xs;
 }
+
+.tab-default {
+  @apply p-2 shadow-lg rounded block text-sm outline-none transition-all duration-200;
+}
+
+.tab-active {
+  @apply border-blue-500 ring-1 ring-blue-500;
+}
+
+.tab-inactive {
+  @apply border-zinc-800 ring-1 ring-zinc-800;
+}
+
+.card {
+  @apply p-3 border rounded  shadow-md border-zinc-800 bg-zinc-900
+}
+.card-title {
+  @apply text-xs text-neutral-300 border-b border-b-zinc-800 pb-1 mb-2
+}

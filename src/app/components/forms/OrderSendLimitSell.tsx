@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectPair } from '@/app/features/trade/tradeSlice';
 import { sendOrder } from '@/app/helpers/orders';
 
-export default function OrderSendBuy() {
+export default function OrderSendLimitSell() {
   const dispatch = useDispatch();
   const itemData = useSelector(selectPair);
   const [formData, setFormData] = useState({
@@ -48,8 +48,9 @@ export default function OrderSendBuy() {
       dispatch(setNotificationMessage('Order sending'));
       setFormData({ ...formData, isFormSending: true });
       await sendOrder({
+        actionType: 'sell',
         amount: formData?.amount,
-        orderType: 'buy',
+        orderType: 'limit',
         pairKey: itemId,
         price: formData?.price,
       }).then((response) => {
@@ -64,7 +65,7 @@ export default function OrderSendBuy() {
   return (
     <form onSubmit={submit}>
       <div className="flex flex-row justify-between items-center pb-1">
-        <div className="text-gray-300 text-lg">Buy</div>
+        <div className="text-gray-300 text-lg">Sell</div>
         <div className="text-gray-300 text-xs">{itemData?.data?.titleSeparatedEnd}</div>
       </div>
       <div className="space-y-3">
@@ -118,7 +119,7 @@ export default function OrderSendBuy() {
             </div>
           </div>
         </div>
-        <button type="submit" disabled={formData.isFormSending} className="btn-success w-full">
+        <button type="submit" disabled={formData.isFormSending} className="btn-danger w-full">
           {formData.isFormSending ? (
             <div className="flex flex-row justify-center items-center gap-2">
               <ArrowPathIcon className="size-4 animate-spin" />
@@ -127,7 +128,7 @@ export default function OrderSendBuy() {
           ) : (
             <div className="flex flex-row justify-center items-center gap-2">
               <PaperAirplaneIcon className="size-4" />
-              Limit Buy {itemData?.data?.titleSeparatedBegin}
+              Limit Sell {itemData?.data?.titleSeparatedBegin}
             </div>
           )}
         </button>

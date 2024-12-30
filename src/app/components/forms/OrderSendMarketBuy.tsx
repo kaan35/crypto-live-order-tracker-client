@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectPair } from '@/app/features/trade/tradeSlice';
 import { sendOrder } from '@/app/helpers/orders';
 
-export default function OrderSendSell() {
+export default function OrderSendMarketBuy() {
   const dispatch = useDispatch();
   const itemData = useSelector(selectPair);
   const [formData, setFormData] = useState({
@@ -30,7 +30,7 @@ export default function OrderSendSell() {
     event.preventDefault();
     let requestDataCheck = false;
 
-    if (formData?.amount && formData?.price) {
+    if (formData?.amount) {
       requestDataCheck = true;
     }
 
@@ -48,10 +48,11 @@ export default function OrderSendSell() {
       dispatch(setNotificationMessage('Order sending'));
       setFormData({ ...formData, isFormSending: true });
       await sendOrder({
+        actionType: 'buy',
         amount: formData?.amount,
-        orderType: 'sell',
+        orderType: 'market',
         pairKey: itemId,
-        price: formData?.price,
+        price: Math.floor(Math.random() * (99999 - 10000) + 10000),
       }).then((response) => {
         setFormData({ ...formData, isFormSending: false });
         dispatch(showNotification());
@@ -64,7 +65,7 @@ export default function OrderSendSell() {
   return (
     <form onSubmit={submit}>
       <div className="flex flex-row justify-between items-center pb-1">
-        <div className="text-gray-300 text-lg">Sell</div>
+        <div className="text-gray-300 text-lg">Buy</div>
         <div className="text-gray-300 text-xs">{itemData?.data?.titleSeparatedEnd}</div>
       </div>
       <div className="space-y-3">
@@ -72,17 +73,9 @@ export default function OrderSendSell() {
           <div className="absolute inset-y-0 start-0 px-2 place-content-center">
             <div className="text-gray-600 hover:text-gray-700">Price</div>
           </div>
-          <input
-            className="input-column text-right pe:20"
-            name="price"
-            onChange={handleFormChange}
-            step="0.000001"
-            type="number"
-          />
+          <input className="input-column text-right pe:20" name="price" type="number" disabled />
           <div className="absolute inset-y-0 end-0 px-2 place-content-center">
-            <div className="text-gray-600 hover:text-gray-700">
-              {itemData?.data?.titleSeparatedEnd}
-            </div>
+            <div className="text-gray-600 hover:text-gray-700">Market Price</div>
           </div>
         </div>
         <div className="relative flex items-center mb-3">
@@ -118,16 +111,16 @@ export default function OrderSendSell() {
             </div>
           </div>
         </div>
-        <button type="submit" disabled={formData.isFormSending} className="btn-danger w-full">
+        <button type="submit" disabled={formData.isFormSending} className="btn-success w-full">
           {formData.isFormSending ? (
             <div className="flex flex-row justify-center items-center gap-2">
               <ArrowPathIcon className="size-4 animate-spin" />
-              Order Sending
+              Trade Sending
             </div>
           ) : (
             <div className="flex flex-row justify-center items-center gap-2">
               <PaperAirplaneIcon className="size-4" />
-              Limit Sell {itemData?.data?.titleSeparatedBegin}
+              Market Buy {itemData?.data?.titleSeparatedBegin}
             </div>
           )}
         </button>

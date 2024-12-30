@@ -1,14 +1,24 @@
-import React from 'react';
-import { selectPairsList } from '@/app/features/trade/tradeSlice';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import NotFound from '@/app/components/NotFound';
+import { fetchPairsByTitle } from '@/app/helpers/pairs';
+import Loading from '@/app/components/Loading';
+import { PairListResponse } from '@/app/types/pairs';
 
 export default function PairsList() {
-  const pairsList = useSelector(selectPairsList);
+  const [isLoading, setIsLoading] = useState(true);
+  const [items, setItems] = useState<PairListResponse>();
+
+  useEffect(() => {
+    fetchPairsByTitle().then((response) => {
+      setItems(response);
+      setIsLoading(false);
+    });
+  }, []);
 
   return (
-    <div>
+    <>
+      <div className="card-title">Pairs</div>
       <div className="grid grid-cols-4 gap-5 mb-1">
         <div className="text-xs text-gray-600">Pair</div>
         <div className="text-xs text-gray-600">Last Price</div>
@@ -16,8 +26,10 @@ export default function PairsList() {
         <div className="text-xs text-gray-600">Volume</div>
       </div>
       <div className="space-y-1">
-        {pairsList?.status === 'success' ? (
-          pairsList?.data?.map((item) => (
+        {isLoading ? (
+          <Loading />
+        ) : items?.status === 'success' ? (
+          items?.data?.map((item) => (
             <div key={item?._id} className="grid grid-cols-4 gap-5">
               <div>
                 <Link href={'/trade/' + item?.key}>
@@ -33,6 +45,6 @@ export default function PairsList() {
           <NotFound />
         )}
       </div>
-    </div>
+    </>
   );
 }
