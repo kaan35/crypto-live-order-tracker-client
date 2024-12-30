@@ -19,7 +19,6 @@ export default function OrderSendMarketSell() {
     price: 0,
     total: 0,
   });
-  const itemTotal = formData?.price * formData?.amount;
   const itemId = useParams().id;
 
   const handleFormChange = (e: { target: { name: string; value: string } }) => {
@@ -92,22 +91,6 @@ export default function OrderSendMarketSell() {
           <div className="absolute inset-y-0 end-0 px-2 place-content-center">
             <div className="text-gray-600 hover:text-gray-700">
               {itemData?.data?.titleSeparatedBegin}
-            </div>
-          </div>
-        </div>
-        <div className="relative flex items-center mb-3">
-          <div className="absolute inset-y-0 start-0 px-2 place-content-center">
-            <div className="text-gray-600 hover:text-gray-700">Total</div>
-          </div>
-          <input
-            className="input-column text-right pe:20"
-            value={itemTotal}
-            name="total"
-            disabled
-          />
-          <div className="absolute inset-y-0 end-0 px-2 place-content-center">
-            <div className="text-gray-600 hover:text-gray-700">
-              {itemData?.data?.titleSeparatedEnd}
             </div>
           </div>
         </div>

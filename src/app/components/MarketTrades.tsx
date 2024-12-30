@@ -3,14 +3,20 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import { Order } from '@/app/types/orders';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectPair } from '@/app/features/trade/tradeSlice';
 import { Config } from '@/lib/config';
 import Loading from '@/app/components/Loading';
 import NotFound from '@/app/components/NotFound';
 import { fetchOrdersMarket } from '@/app/helpers/orders';
+import {
+  setNotificationMessage,
+  setNotificationType,
+  showNotification,
+} from '@/app/features/notification/notificationSlice';
 
 export default function MarketTrades() {
+  const dispatch = useDispatch();
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [items, setItems] = useState<Order[]>([
@@ -59,6 +65,13 @@ export default function MarketTrades() {
 
   useEffect(() => {
     socket.on(`pair-${itemData?.data?.key}-order-market`, (data) => {
+      dispatch(showNotification());
+      dispatch(setNotificationType('success'));
+      dispatch(
+        setNotificationMessage(
+          `New market trade received. Price: ${data?.price} Amount: ${data?.amount} Time: ${data?.insertDateTime.split(' ')[1]}`,
+        ),
+      );
       setItems((prev: Order[]) => {
         if (prev.length >= 10) prev.pop();
         return [data, ...prev];
