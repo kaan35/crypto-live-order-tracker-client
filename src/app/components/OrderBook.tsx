@@ -2,7 +2,7 @@ import { SignalIcon, SignalSlashIcon } from '@heroicons/react/24/outline';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
-import { OrderItem, OrderState } from '@/app/types/orders';
+import { Order } from '@/app/types/orders';
 import { useSelector } from 'react-redux';
 import { selectPair } from '@/app/features/trade/tradeSlice';
 import { Config } from '@/lib/config';
@@ -13,10 +13,10 @@ import { fetchOrders } from '@/app/helpers/orders';
 export default function OrderBook() {
   const [isConnected, setIsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [ordersBuy, setOrdersBuy] = useState<OrderState>([
+  const [ordersBuy, setOrdersBuy] = useState<Order[]>([
     { _id: '', amount: '', orderType: '', price: '', total: '' },
   ]);
-  const [ordersSell, setOrdersSell] = useState<OrderState>([
+  const [ordersSell, setOrdersSell] = useState<Order[]>([
     { _id: '', amount: '', orderType: '', price: '', total: '' },
   ]);
   const itemData = useSelector(selectPair);
@@ -56,14 +56,14 @@ export default function OrderBook() {
   useEffect(() => {
     socket.on(`pair-${itemData?.data?.key}-order`, (data) => {
       if (data.orderType === 'buy') {
-        setOrdersBuy((prev) => {
+        setOrdersBuy((prev: Order[]) => {
           if (prev.length >= 10) prev.pop();
           return [data, ...prev];
         });
       }
 
       if (data.orderType === 'sell') {
-        setOrdersSell((prev: OrderItem[]) => {
+        setOrdersSell((prev: Order[]) => {
           if (prev.length >= 10) prev.pop();
           return [data, ...prev];
         });

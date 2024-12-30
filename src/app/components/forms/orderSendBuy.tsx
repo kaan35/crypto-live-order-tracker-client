@@ -28,8 +28,17 @@ export default function OrderSendBuy() {
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    let requestDataCheck = false;
 
-    if (formData?.isFormSending) {
+    if (formData?.amount && formData?.price) {
+      requestDataCheck = true;
+    }
+
+    if (!requestDataCheck) {
+      dispatch(showNotification());
+      dispatch(setNotificationType('failed'));
+      dispatch(setNotificationMessage('Please fill required fields'));
+    } else if (formData?.isFormSending) {
       dispatch(showNotification());
       dispatch(setNotificationType('failed'));
       dispatch(setNotificationMessage('Please wait'));

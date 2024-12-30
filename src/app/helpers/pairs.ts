@@ -9,3 +9,13 @@ export const fetchPairsDetail = async (itemId: string | Array<string> | undefine
   })
     .then((result) => result.json())
     .then((response) => response);
+
+export const fetchPairsByTitle = async () =>
+  await fetch(`${Config.apiUrl}pairs/sort/title`, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((result) => result.json())
+    .then((response) => response);

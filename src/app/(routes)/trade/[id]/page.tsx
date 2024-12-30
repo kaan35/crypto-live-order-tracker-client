@@ -4,11 +4,12 @@ import OrderSendSell from '@/app/components/forms/orderSendSell';
 import Loading from '@/app/components/Loading';
 import NotFound from '@/app/components/NotFound';
 import OrderBook from '@/app/components/OrderBook';
-import { selectPair, setPair } from '@/app/features/trade/tradeSlice';
+import { selectPair, setPair, setPairsList } from '@/app/features/trade/tradeSlice';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPairsDetail } from '@/app/helpers/pairs';
+import { fetchPairsByTitle, fetchPairsDetail } from '@/app/helpers/pairs';
+import PairsList from '@/app/components/PairsList';
 
 export default function Page() {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +20,9 @@ export default function Page() {
   useEffect(() => {
     fetchPairsDetail(itemId).then((response) => {
       dispatch(setPair(response));
+    });
+    fetchPairsByTitle().then((response) => {
+      dispatch(setPairsList(response));
       setIsLoading(false);
     });
   }, []);
@@ -28,7 +32,7 @@ export default function Page() {
       {isLoading ? (
         <Loading />
       ) : itemData?.status === 'success' ? (
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-col xl:flex-row gap-4">
           <div className="p-3 basis-1/4 border rounded  shadow-md border-zinc-800 bg-zinc-900">
             <OrderBook />
           </div>
@@ -49,7 +53,9 @@ export default function Page() {
               <div className="text-xs text-neutral-300 border-b border-b-zinc-800 pb-1 mb-2">
                 Pairs
               </div>
-              <div className="my-1 mb-2"></div>
+              <div className="my-1 mb-2">
+                <PairsList />
+              </div>
             </div>
             <div>
               <div className="text-xs text-neutral-300 border-b border-b-zinc-800 pb-1 mb-2">
