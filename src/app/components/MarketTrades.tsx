@@ -32,7 +32,6 @@ export default function MarketTrades() {
   ]);
   const itemData = useSelector(selectPair);
   const itemId = useParams().id;
-  const socket = io(Config.socketUrl);
 
   useEffect(() => {
     fetchOrdersMarket(itemId).then((response) => {
@@ -42,6 +41,8 @@ export default function MarketTrades() {
   }, []);
 
   useEffect(() => {
+    const socket = io(Config.socketUrl);
+
     function onConnect() {
       setIsConnected(true);
     }
@@ -57,13 +58,6 @@ export default function MarketTrades() {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-    };
-  }, []);
-
-  useEffect(() => {
     socket.on(`pair-${itemData?.data?.key}-order-market`, (data) => {
       dispatch(showNotification());
       dispatch(setNotificationType('success'));
@@ -77,6 +71,11 @@ export default function MarketTrades() {
         return [data, ...prev];
       });
     });
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    };
   }, []);
 
   return (

@@ -1,3 +1,4 @@
+'use server';
 import { Config } from '@/lib/config';
 
 export const fetchPairsDetail = async (itemId: string | Array<string> | undefined) =>

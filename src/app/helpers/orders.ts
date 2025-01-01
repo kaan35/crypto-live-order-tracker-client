@@ -1,3 +1,4 @@
+'use server';
 import { Config } from '@/lib/config';
 
 export const fetchOrdersLimit = async (itemId: string | Array<string> | undefined) =>

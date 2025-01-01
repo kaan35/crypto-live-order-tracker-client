@@ -17,7 +17,6 @@ export default function OrderBook() {
   const [ordersSell, setOrdersSell] = useState<Order[]>([]);
   const itemData = useSelector(selectPair);
   const itemId = useParams().id;
-  const socket = io(Config.socketUrl);
 
   useEffect(() => {
     fetchOrdersLimit(itemId).then((response) => {
@@ -28,6 +27,8 @@ export default function OrderBook() {
   }, []);
 
   useEffect(() => {
+    const socket = io(Config.socketUrl);
+
     function onConnect() {
       setIsConnected(true);
     }
@@ -43,13 +44,6 @@ export default function OrderBook() {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-    };
-  }, []);
-
-  useEffect(() => {
     socket.on(`pair-${itemData?.data?.key}-order-limit`, (data) => {
       if (data.actionType === 'buy') {
         setOrdersBuy((prev: Order[]) => {
@@ -65,6 +59,11 @@ export default function OrderBook() {
         });
       }
     });
+
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    };
   }, []);
 
   return (
