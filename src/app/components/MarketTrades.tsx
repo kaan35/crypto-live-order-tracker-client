@@ -58,7 +58,7 @@ export default function MarketTrades() {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
-    socket.on(`pair-${itemData?.data?.key}-order-market`, (data) => {
+    socket.on(`pairs-${itemData?.data?.key}-order-market`, (data) => {
       dispatch(showNotification());
       dispatch(setNotificationType('success'));
       dispatch(

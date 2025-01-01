@@ -44,7 +44,7 @@ export default function OrderBook() {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
 
-    socket.on(`pair-${itemData?.data?.key}-order-limit`, (data) => {
+    socket.on(`pairs-${itemData?.data?.key}-order-limit`, (data) => {
       if (data.actionType === 'buy') {
         setOrdersBuy((prev: Order[]) => {
           if (prev.length >= 10) prev.pop();
